@@ -7,7 +7,7 @@ import projet.view.ConsolePersonalityTestView;
 import projet.view.PersonalityTestView;
 // === Import pour le Contrôleur ===
 
-import projet.controller.PersonalityTestController;
+
 /**
  * Classe d’entrée principale pour lancer le test de personnalité.
  * Assurez-vous que les chemins d'import sont corrects selon la structure de votre projet.
