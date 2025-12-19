@@ -6,7 +6,7 @@ package projet; // Le package 'projet' est ici correct pour Main.java
 import projet.controller.PersonalityTestController;
 import projet.model.ResultStrategy;
 import projet.model.SimpleCountStrategy;
-import projet.model.WeightedStrategy;
+import projet.model.WeightedStrategy; // S'assurer que WeightedStrategy existe
 import projet.view.ConsolePersonalityTestView;
 import projet.view.PersonalityTestView;
 /**
@@ -22,18 +22,21 @@ public class Main {
         String strategyArg = (args != null && args.length > 0) ? args[0] : "simple";
         ResultStrategy strategy;
         if ("weighted".equalsIgnoreCase(strategyArg)) {
+            // Assurez-vous que WeightedStrategy est implémentée et disponible.
+            // Si elle ne l'est pas encore, cette ligne causera une erreur de compilation.
             strategy = new WeightedStrategy();
-            System.out.println("Using WeightedStrategy"); // Guillemets droits
+            System.out.println("Using WeightedStrategy");
         } else {
             strategy = new SimpleCountStrategy();
-            System.out.println("Using SimpleCountStrategy"); // **CORRECTION ICI : Guillemets droits**
+            System.out.println("Using SimpleCountStrategy");
         }
         // Instanciation de la vue (interface utilisateur, ici console)
         PersonalityTestView view = new ConsolePersonalityTestView();
         // Instanciation du contrôleur avec la vue et la stratégie choisie
+        // Les questions sont maintenant initialisées au moment de la création du contrôleur.
         PersonalityTestController controller = new PersonalityTestController(view, strategy);
         // Initialisation des questions via le contrôleur
-        controller.initQuestions();
+        // controller.initQuestions(); // <-- CETTE LIGNE EST SUPPRIMÉE
         // Lancement du test de personnalité
         controller.runTest();
     }

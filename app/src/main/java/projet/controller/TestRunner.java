@@ -6,8 +6,6 @@ import projet.model.SimpleCountStrategy;
 import projet.view.ConsolePersonalityTestView;
 import projet.view.PersonalityTestView;
 // === Import pour le Contrôleur ===
-
-
 /**
  * Classe d’entrée principale pour lancer le test de personnalité.
  * Assurez-vous que les chemins d'import sont corrects selon la structure de votre projet.
@@ -22,10 +20,11 @@ public class TestRunner {
         ResultStrategy strategy = new SimpleCountStrategy(); // ou new WeightedStrategy() si vous l'implémentez
         // 3. Instanciation du Contrôleur :
         // Le contrôleur orchestre l'application, utilisant la vue et la stratégie.
+        // Les questions sont maintenant initialisées au moment de la création du contrôleur.
         PersonalityTestController controller = new PersonalityTestController(view, strategy);
-        // 4. Initialisation des questions par le contrôleur :
-        // Le contrôleur charge ou crée les questions nécessaires pour le test.
-        controller.initQuestions();
+        // 4. L'initialisation des questions est gérée à l'intérieur du constructeur du contrôleur.
+        //    Donc, cette ligne n'est plus nécessaire et doit être supprimée.
+        // controller.initQuestions(); // <-- LIGNE SUPPRIMÉE
         // 5. Lancement du test :
         // Le contrôleur exécute le processus complet du test de personnalité.
         controller.runTest();
