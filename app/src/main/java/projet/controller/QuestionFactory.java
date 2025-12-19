@@ -1,3 +1,4 @@
+// Dans projet/controller/QuestionFactory.java
 package projet.controller;
 import java.util.Arrays;
 import java.util.List;
@@ -18,17 +19,22 @@ public class QuestionFactory {
         return new PersonalityQuestion(id, text, type, options);
     }
     /**
-
+     * Crée une liste d'options par défaut pour une question.
+     * Les textes des options sont des réponses génériques : "Oui", "Non", "Je ne sais pas".
      *
-     * @param primary Le type de personnalité principal pour l'option forte.
-     * @param secondary Le type de personnalité secondaire pour l'option plus faible.
+     * @param primary Le type de personnalité principal pour l'option affirmative (Oui).
+     * @param secondary Le type de personnalité secondaire pour l'option négative (Non).
      * @return Une liste d'objets Option.
      */
     public static List<Option> defaultOptionsFor(PersonalityType primary, PersonalityType secondary) {
         return Arrays.asList(
-                new Option("A", "Plutôt " + primary.name().toLowerCase(), primary, 2),
-                new Option("B", "Plutôt " + secondary.name().toLowerCase(), secondary, 1),
-                new Option("C", "Ne sais pas / neutre", primary, 0) 
+                // Correction des guillemets typographiques ("«" et "»" remplacés par "\"")
+                // et modification du texte de l'option pour "Oui"
+                new Option("A", "Oui", primary, 2),
+                // Correction des guillemets typographiques et modification du texte de l'option pour "Non"
+                new Option("B", "Non", secondary, 1),
+                // Correction des guillemets typographiques et modification du texte de l'option pour "Je ne sais pas"
+                new Option("C", "Je ne sais pas", primary, 0)
         );
     }
 }
