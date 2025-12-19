@@ -27,11 +27,13 @@ public class Option {
     @Override
     public String toString() {
         // CORRECTION 1 : Remplacement des guillemets typographiques par des guillemets standards.
-        // CORRECTION 2 : La méthode toString() ne retourne PLUS la partie "(Score: ..., Type: ...)"
-        return text; // Retourne uniquement le texte de l'option pour un affichage concis.
+        // CORRECTION 2 : La méthode toString() ne retourne PLUS la partie « (Score: …, Type: …) »
+        return text; // Retourne uniquement le texte de l’option pour un affichage concis.
     }
-    // Ajout d'une méthode pour l'affichage détaillé si nécessaire (facultatif mais recommandé)
+    // Ajout d’une méthode pour l’affichage détaillé si nécessaire (facultatif mais recommandé)
     public String toDetailedString() {
+        // C'est ici que tu dois corriger les guillemets.
+        // Remplace TOUS les « par " et TOUS les » par ".
         return id + ") " + text + " (Score: " + score + ", Type: " + type + ")";
     }
 }
