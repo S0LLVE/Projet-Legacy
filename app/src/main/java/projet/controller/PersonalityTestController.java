@@ -8,7 +8,7 @@ import projet.view.PersonalityTestView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Optional; 
 /**
  * Contrôleur : orchestre la vue et la logique métier (stratégie de calcul).
  */
@@ -21,17 +21,13 @@ public class PersonalityTestController {
         this.strategy = strategy;
         loadQuestions(); // Charge toutes les questions dès la construction du contrôleur
     }
-    /**
+    /*
      * Charge toutes les questions de personnalité dans la liste 'questions'.
      * Ajusté pour les PersonalityType disponibles : INTROVERSION, EXTRAVERSION, PLANNING, CREATIVITY, ALTRUISM.
-     *
-     * IMPORTANT: Assurez-vous que QuestionFactory.createQuestion et
-     * QuestionFactory.defaultOptionsFor existent et ont les bonnes signatures.
-     * De plus, les options retournées par defaultOptionsFor doivent maintenant inclure un ID (A, B, C...).
      */
     private void loadQuestions() {
         questions.clear(); // S'assurer que la liste est vide avant de charger
-        // --- 1. Introversion / Extraversion (6 questions) ---
+        // 1. Introversion / Extraversion (6 questions)
         questions.add(QuestionFactory.createQuestion(
                 "Q1", "Préférez-vous passer une soirée tranquille à la maison plutôt qu'à une grande fête ?",
                 PersonalityType.INTROVERSION, QuestionFactory.defaultOptionsFor(PersonalityType.INTROVERSION, PersonalityType.EXTRAVERSION)));
@@ -69,7 +65,7 @@ public class PersonalityTestController {
         questions.add(QuestionFactory.createQuestion(
                 "Q12", "Aimez-vous l'idée de changer vos plans à la dernière minute pour une meilleure opportunité ?",
                 PersonalityType.CREATIVITY, QuestionFactory.defaultOptionsFor(PersonalityType.CREATIVITY, PersonalityType.PLANNING)));
-        // --- 3. Créativité / Opposé à Créativité (6 questions) ---
+        // 3. Créativité / Opposé à Créativité (6 questions)
         questions.add(QuestionFactory.createQuestion(
                 "Q13", "Aimez-vous inventer de nouvelles solutions ou de nouvelles approches aux problèmes ?",
                 PersonalityType.CREATIVITY, QuestionFactory.defaultOptionsFor(PersonalityType.CREATIVITY, PersonalityType.PLANNING)));
@@ -88,7 +84,7 @@ public class PersonalityTestController {
         questions.add(QuestionFactory.createQuestion(
                 "Q18", "Face à un problème, préférez-vous une méthode logique et séquentielle ou une approche plus libre et intuitive ?",
                 PersonalityType.PLANNING, QuestionFactory.defaultOptionsFor(PersonalityType.PLANNING, PersonalityType.CREATIVITY)));
-        // --- 4. Altruisme / Opposé à Altruisme (4 questions) ---
+        // 4. Altruisme / Opposé à Altruisme (4 questions)
         questions.add(QuestionFactory.createQuestion(
                 "Q19", "Êtes-vous souvent le premier à offrir votre aide à ceux qui en ont besoin, même sans être sollicité ?",
                 PersonalityType.ALTRUISM, QuestionFactory.defaultOptionsFor(PersonalityType.ALTRUISM, PersonalityType.INTROVERSION)));
@@ -107,16 +103,15 @@ public class PersonalityTestController {
         List<Answer> answers = new ArrayList<>();
         for (PersonalityQuestion q : questions) {
             view.showQuestion(q);
-            Answer a = view.readAnswer(); // La vue doit retourner un Answer valide.
-            if (a != null) { // Seulement si une réponse valide a été obtenue de la vue.
-                // Ici, on pourrait ajouter une validation supplémentaire si nécessaire.
-                answers.add(a);
-            } else {
-                System.err.println("La vue n'a pas pu fournir une réponse valide pour la question " + q.getId() + ".");
-                // Décider comment gérer cela : continuer, ignorer la question, ou arrêter.
-                // Pour l'instant, nous ignorons cette question si la vue retourne null.
+            Optional<Answer> answerOptional = view.readAnswer(); // Récupère un Optional<Answer>
+            if (answerOptional.isPresent()) { // L'utilisateur a fourni une réponse (n'a pas quitté)
+                answers.add(answerOptional.get());
+            } else { // L'utilisateur a choisi de quitter
+                view.displayExitMessage();
+                return; // Termine l'exécution du test immédiatement
             }
         }
+        // Si l'utilisateur a répondu à toutes les questions
         Result result = evaluate(answers);
         displayResults(result);
     }
@@ -135,7 +130,7 @@ public class PersonalityTestController {
     public void displayResults(Result result) {
         view.showResults(result);
     }
-    // Cette méthode est potentiellement utile pour des tests ou des affichages, mais n'est pas utilisée directement dans runTest.
+    // Cette méthode est potentiellement utile pour des tests ou des affichages, mais n’est pas utilisée directement dans runTest.
     public List<PersonalityQuestion> getQuestions() {
         return questions;
     }

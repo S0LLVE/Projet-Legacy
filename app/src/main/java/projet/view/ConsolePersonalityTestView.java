@@ -1,4 +1,4 @@
-// Dans projet/view/ConsolePersonalityTestView.java
+
 package projet.view;
 import projet.model.Answer;
 import projet.model.Option;
@@ -6,8 +6,9 @@ import projet.model.PersonalityQuestion;
 import projet.model.PersonalityType;
 import projet.model.Result;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional; // Ajouté pour Optional
 import java.util.Scanner;
-import java.util.Map; // Import pour Map
 /**
  * Implémentation console. readAnswer() se base sur la dernière question affichée.
  */
@@ -20,85 +21,70 @@ public class ConsolePersonalityTestView implements PersonalityTestView {
         System.out.println();
         System.out.println("Question " + question.getId() + ": " + question.getText());
         List<Option> options = question.getOptions();
-        
-        // Affichage des options :
-        // Maintenant que Option.toString() retourne seulement le texte,
-        // nous pouvons soit utiliser forEach(System.out::println) qui appellera toString(),
-        // soit explicitement afficher l'ID et le texte.
-        // Je préfère afficher explicitement ID. Texte pour la clarté de l'interface utilisateur.
         for (Option option : options) {
-            System.out.println(option.getId() + ". " + option.getText()); 
+            System.out.println(option.getId() + ". " + option.getText());
         }
-        System.out.print("Votre choix (id de l'option, ex: A, B, C) : ");
+        // Ajout de l'option de quitter
+        System.out.println("Q. Quitter le questionnaire");
+        System.out.print("Votre choix (id de l'option, ex: A, B, C, Q) : ");
     }
     @Override
-    public Answer readAnswer() {
+    public Optional<Answer> readAnswer() { // La signature a changé pour Optional<Answer>
         if (lastQuestion == null) {
             System.err.println("Erreur: Aucune question n'a été affichée avant de demander une réponse.");
-            return null; // Ou jeter une RuntimeException
+            return Optional.empty(); // Retourne Optional.empty() en cas d'erreur grave
         }
-        String input = scanner.nextLine().trim();
+        String input;
         Option selected = null;
-        for (Option o : lastQuestion.getOptions()) {
-            // o.getId() est maintenant valide grâce à Option.java
-            if (o.getId().equalsIgnoreCase(input)) {
-                selected = o;
-                break;
+        boolean validInput = false;
+        while (!validInput) {
+            input = scanner.nextLine().trim();
+            if (input.equalsIgnoreCase("Q")) { // L'utilisateur veut quitter
+                return Optional.empty();
             }
-        }
-        if (selected == null) {
-            System.out.println("Choix invalide. Veuillez entrer l'ID d'une option valide (ex: A, B, C).");
-            
-            // Pour le moment, sélectionne la première option par défaut si l'entrée est invalide.
-            // Une meilleure approche serait de boucler tant que l'entrée est invalide.
-            if (!lastQuestion.getOptions().isEmpty()) {
-                selected = lastQuestion.getOptions().get(0); // Sélectionne la première option par défaut
-                System.out.println("Première option sélectionnée par défaut : " + selected.getId() + ". " + selected.getText());
-            } else {
-                System.err.println("Erreur: La question n'a aucune option disponible. Impossible de fournir une réponse.");
-                return null;
+            for (Option o : lastQuestion.getOptions()) {
+                if (o.getId().equalsIgnoreCase(input)) {
+                    selected = o;
+                    validInput = true;
+                    break;
+                }
+            }
+            if (!validInput) {
+                System.out.println("Choix invalide. Veuillez entrer l'ID d'une option valide (ex: A, B, C) ou 'Q' pour quitter.");
+                System.out.print("Votre choix (id de l'option, ex: A, B, C, Q) : ");
             }
         }
         
         // Assurez-vous que le constructeur de Answer(String questionId, Option selectedOption) existe.
-        return new Answer(lastQuestion.getId(), selected);
+        // Si 'selected' est null ici, c'est une erreur logique car validInput devrait être true.
+        return Optional.of(new Answer(lastQuestion.getId(), selected));
     }
     @Override
     public void showResults(Result result) {
         System.out.println();
-        // CORRECTION des guillemets typographiques
-        System.out.println("--- Résultats ---"); 
-        
-        // Utilisation de Map.Entry pour parcourir les scores et affichage plus clair
-        if (result.getSummary() != null) {
+        System.out.println("--- Résultats ---");
+        if (result.getSummary() != null && !result.getSummary().isEmpty()) { // Vérifier si le résumé n'est pas vide
             System.out.println("Scores détaillés:");
             for (Map.Entry<PersonalityType, Integer> entry : result.getSummary().entrySet()) {
                 System.out.println(entry.getKey().name() + " : " + entry.getValue() + " points");
             }
         } else {
-            System.out.println("Aucun résumé des scores disponible.");
+            System.out.println("Aucun résumé des scores disponible ou calculé.");
         }
-        // Assurez-vous que getWinner() retourne un String ou a un toString() approprié
-        if (result.getWinner() != null) {
-            System.out.println("Type dominant: " + result.getWinner());
+        
+        PersonalityType winner = result.getWinner(); // Utilisons la méthode getWinner qui retourne directement PersonalityType
+        if (winner != null) {
+            System.out.println("\nType dominant: " + winner.name()); // Utilisez .name() pour le nom de l'enum
+            System.out.println(getDescriptionForPersonalityType(winner));
         } else {
             System.out.println("Aucun type dominant n'a été déterminé.");
         }
-        // Ajout de la description du type de personnalité dominant pour une meilleure expérience utilisateur.
-        // Supposons que getWinner() retourne un PersonalityType ou son nom sous forme de String.
-        Object winner = result.getWinner();
-        if (winner instanceof PersonalityType) {
-            System.out.println(getDescriptionForPersonalityType((PersonalityType) winner));
-        } else if (winner != null) {
-            try {
-                // Tenter de convertir un String en PersonalityType
-                PersonalityType winnerType = PersonalityType.valueOf(winner.toString().toUpperCase());
-                System.out.println(getDescriptionForPersonalityType(winnerType));
-            } catch (IllegalArgumentException e) {
-                // Le winner n'est pas un nom de PersonalityType valide
-                // System.err.println("Erreur: Le type de personnalité gagnant n'est pas reconnu pour la description.");
-            }
-        }
+    }
+    @Override
+    public void displayExitMessage() {
+        System.out.println("\n--- Questionnaire terminé ---");
+        System.out.println("Vous avez choisi de quitter le questionnaire. Au revoir !");
+        scanner.close(); // Ferme le scanner quand le questionnaire est terminé
     }
     // Méthode utilitaire pour donner une description basée sur le type de personnalité
     private String getDescriptionForPersonalityType(PersonalityType type) {
@@ -112,7 +98,7 @@ public class ConsolePersonalityTestView implements PersonalityTestView {
             case CREATIVITY:
                 return "Vous êtes imaginatif(ve) et innovant(e). Vous aimez explorer de nouvelles idées et trouver des solutions originales.";
             case ALTRUISM:
-                return "Vous êtes une personne compatissante et généreuse, motivée par le bien-être d'autrui. Vous cherchez à aider et à soutenir votre entourage.";
+                return "Vous êtes une personne compatissante et généreuse, motivée par le bien-être d’autrui. Vous cherchez à aider et à soutenir votre entourage.";
             default:
                 return "Description non disponible pour ce type de personnalité.";
         }

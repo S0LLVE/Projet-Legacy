@@ -28,13 +28,10 @@ public class QuestionFactory {
      */
     public static List<Option> defaultOptionsFor(PersonalityType primary, PersonalityType secondary) {
         return Arrays.asList(
-                // Correction des guillemets typographiques en guillemets droits (")
                 // L'ID est maintenant "A", le texte "Oui", associé au type primary avec score 2.
                 new Option("A", "Oui", primary, 2),
-                // Correction des guillemets typographiques en guillemets droits (")
                 // L'ID est maintenant "B", le texte "Non", associé au type secondary avec score 1.
                 new Option("B", "Non", secondary, 1),
-                // Correction des guillemets typographiques en guillemets droits (")
                 // L'ID est maintenant "C", le texte "Je ne sais pas".
                 // Pour l'option neutre, le PersonalityType devrait être null ou un type spécifique comme NONE,
                 // et le score est 0. J'ai mis null comme c'est souvent le cas pour une réponse neutre.

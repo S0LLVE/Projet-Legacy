@@ -1,39 +1,37 @@
-// Dans projet/model/Option.java
+
 package projet.model;
 public class Option {
     private final String id;
     private final String text; // Le texte qui sera affiché
-    private final PersonalityType type;
-    private final int score;
-    public Option(String id, String text, PersonalityType type, int score) {
+    private final PersonalityType associatedPersonalityType; // Renommé 'type' en 'associatedPersonalityType' pour la clarté et la compatibilité
+    private final int points; // Renommé 'score' en 'points' pour la clarté et la compatibilité
+    public Option(String id, String text, PersonalityType associatedPersonalityType, int points) {
         this.id = id;
         this.text = text;
-        this.type = type;
-        this.score = score;
+        this.associatedPersonalityType = associatedPersonalityType;
+        this.points = points;
     }
-    // --- Getters ---
+    //Getters
     public String getId() {
         return id;
     }
     public String getText() {
         return text;
     }
-    public PersonalityType getType() {
-        return type;
+    // Renommage du getter pour correspondre à la stratégie
+    public PersonalityType getAssociatedPersonalityType() {
+        return associatedPersonalityType;
     }
-    public int getScore() {
-        return score;
+    // Renommage du getter pour correspondre à la stratégie
+    public int getPoints() {
+        return points;
     }
     @Override
     public String toString() {
-        // CORRECTION 1 : Remplacement des guillemets typographiques par des guillemets standards.
-        // CORRECTION 2 : La méthode toString() ne retourne PLUS la partie « (Score: …, Type: …) »
         return text; // Retourne uniquement le texte de l’option pour un affichage concis.
     }
     // Ajout d’une méthode pour l’affichage détaillé si nécessaire (facultatif mais recommandé)
     public String toDetailedString() {
-        // C'est ici que tu dois corriger les guillemets.
-        // Remplace TOUS les « par " et TOUS les » par ".
-        return id + ") " + text + " (Score: " + score + ", Type: " + type + ")";
+        return id + ") " + text + " (Points: " + points + ", Type: " + associatedPersonalityType + ")";
     }
 }
