@@ -46,7 +46,7 @@ public class PersonalityTestController {
         questions.add(QuestionFactory.createQuestion(
                 "Q6", "Avez-vous tendance à engager la conversation avec des inconnus pour en apprendre plus ?",
                 PersonalityType.EXTRAVERSION, QuestionFactory.defaultOptionsFor(PersonalityType.EXTRAVERSION, PersonalityType.INTROVERSION)));
-        // --- 2. Planning / Opposé à Planning (6 questions) ---
+        //2. Planning / Opposé à Planning (6 questions)
         questions.add(QuestionFactory.createQuestion(
                 "Q7", "Aimez-vous planifier vos tâches à l'avance et suivre un programme établi ?",
                 PersonalityType.PLANNING, QuestionFactory.defaultOptionsFor(PersonalityType.PLANNING, PersonalityType.CREATIVITY)));
