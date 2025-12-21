@@ -48,7 +48,7 @@ public class PersonalityTestController {
                 PersonalityType.EXTRAVERSION, QuestionFactory.defaultOptionsFor(PersonalityType.EXTRAVERSION, PersonalityType.INTROVERSION)));
         // --- 2. Planning / Opposé à Planning (6 questions) ---
         questions.add(QuestionFactory.createQuestion(
-                "Q7", "Préfériez-vous planifier vos tâches à l'avance ou les aborder au fur et à mesure avec flexibilité ?",
+                "Q7", "Aimez-vous planifier vos tâches à l'avance et suivre un programme établi ?",
                 PersonalityType.PLANNING, QuestionFactory.defaultOptionsFor(PersonalityType.PLANNING, PersonalityType.CREATIVITY)));
         questions.add(QuestionFactory.createQuestion(
                 "Q8", "Le désordre ou le manque d'organisation vous dérange-t-il significativement ?",
@@ -60,7 +60,7 @@ public class PersonalityTestController {
                 "Q10", "Êtes-vous du genre à prendre des décisions spontanées, même si elles n'étaient pas prévues ?",
                 PersonalityType.CREATIVITY, QuestionFactory.defaultOptionsFor(PersonalityType.CREATIVITY, PersonalityType.PLANNING)));
         questions.add(QuestionFactory.createQuestion(
-                "Q11", "Préférez-vous que vos vacances soient planifiées en détail ou vous laissez-vous porter par les opportunités ?",
+                "Q11", "Préférez-vous planifier vos vacances en détail avant de partir ?",
                 PersonalityType.PLANNING, QuestionFactory.defaultOptionsFor(PersonalityType.PLANNING, PersonalityType.EXTRAVERSION)));
         questions.add(QuestionFactory.createQuestion(
                 "Q12", "Aimez-vous l'idée de changer vos plans à la dernière minute pour une meilleure opportunité ?",
@@ -82,7 +82,7 @@ public class PersonalityTestController {
                 "Q17", "Êtes-vous attiré(e) par les activités artistiques, l'écriture ou la musique ?",
                 PersonalityType.CREATIVITY, QuestionFactory.defaultOptionsFor(PersonalityType.CREATIVITY, PersonalityType.INTROVERSION)));
         questions.add(QuestionFactory.createQuestion(
-                "Q18", "Face à un problème, préférez-vous une méthode logique et séquentielle ou une approche plus libre et intuitive ?",
+                "Q18", "Face à un problème, avez-vous tendance à privilégier une approche logique et séquentielle pour le résoudre ?",
                 PersonalityType.PLANNING, QuestionFactory.defaultOptionsFor(PersonalityType.PLANNING, PersonalityType.CREATIVITY)));
         // 4. Altruisme / Opposé à Altruisme (4 questions)
         questions.add(QuestionFactory.createQuestion(
@@ -92,7 +92,7 @@ public class PersonalityTestController {
                 "Q20", "La détresse ou les problèmes d'autrui vous touchent-ils au point de vouloir agir ?",
                 PersonalityType.ALTRUISM, QuestionFactory.defaultOptionsFor(PersonalityType.ALTRUISM, PersonalityType.PLANNING)));
         questions.add(QuestionFactory.createQuestion(
-                "Q21", "Quand vous entreprenez une action, votre priorité est-elle d'abord vos propres bénéfices ou ceux des autres ?",
+                "Q21", "Lorsque vous entreprenez une action, votre priorité est-elle d'abord vos propres bénéfices ?",
                 PersonalityType.INTROVERSION, QuestionFactory.defaultOptionsFor(PersonalityType.INTROVERSION, PersonalityType.ALTRUISM)));
         questions.add(QuestionFactory.createQuestion(
                 "Q22", "Seriez-vous prêt(e) à faire des sacrifices personnels importants pour le bien d'un groupe ou d'une cause qui vous tient à cœur ?",
